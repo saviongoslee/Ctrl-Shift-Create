@@ -8,10 +8,11 @@ export default TextBox = ({ label, placeholder, onAdjust }) => {
         <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>{label}</Text>
             <View style={styles.textInputContainer}>
-                
+               
                 <TextInput
                     style={styles.textInput}
                     placeholder={placeholder}
+                    placeholderTextColor={'#878'}
                     onChangeText={(text) => onAdjust(text)} //
                 />
             </View>
@@ -34,6 +35,7 @@ const styles = StyleSheet.create({
         paddingBottom: 5,
     },
     textInput: {
+        color: 'white',
         fontSize: 16,
     },
 });

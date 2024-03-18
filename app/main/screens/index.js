@@ -6,16 +6,14 @@ import ListProfiles from '../components/profile/ListProfiles';
 import Button from '../components/profile/Button';
 import Title from '../components/profile/Title';
 
+
 // Profile Selection
 
 export default function Profiles() {
     return (
         <View style={styles.container}>
                 <Title>Select a Profile</Title>
-                <ListProfiles profiles={[
-                    { id: '1', username: 'John' },
-                    { id: '2', username: 'Jane' },
-                ]}/>
+                <ListProfiles />
                 <Button title='Add Profile' onButtonPushed={'nav'} />
         </View>
     )
