@@ -1,15 +1,24 @@
 // This accepts an array of profiles, and lists them in the profile selection menu.
-// {index : number, username : string}
+// {index : number, username : string, userid : number}
 
-import React from 'react';
-import { View, StyleSheet, Image, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { TouchableOpacity, View, StyleSheet, Image, Text } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
+import * as SecureStore from 'expo-secure-store';
 
 // Functions
 
-const ProfileObject = ({ username }) => {
+const ProfileObject = ({ username, userid }) => {
+    const nav = useNavigation();
+
+    const handleProfileClick = () => { // This handles when the profiles are pressed.
+        global.GlobalProfileID = userid;
+        nav.navigate('Menu');
+    }
+
     return (
-        <View style={styles.profileItem}>
+        <TouchableOpacity onPress={handleProfileClick} style={styles.profileItem}>
             <LinearGradient // This creates a gradient outline for the profile picture.
                 colors={['#6A5ACD', '#9370DB']}
                 start={{x: 0, y: 0}}
@@ -19,22 +28,46 @@ const ProfileObject = ({ username }) => {
                 <Image source={require('../../assets/default_profile.png')} resizeMode='cover' style={styles.profileImage} />
             </LinearGradient>
             <Text style={styles.profileText}>{username}</Text>
-        </View>
+        </TouchableOpacity>
     );
 }
 
-const ListProfiles = ({profiles}) => {
-    return (
+// ListProfiles Component
+const ListProfiles = () => {
+    const [profiles, setProfiles] = useState([]);
+
+    useEffect(() => { // This fetches profiles from SecureStore and parses them into JSON, then updates the state.
+        const getProfiles = async () => {
+            const ProfileData = await SecureStore.getItemAsync('profiles');
+
+            if (!ProfileData) return;
+
+            const parsedProfiles = JSON.parse(ProfileData);
+            const profileList = Object.entries(parsedProfiles).map(([ProfileID, profile], index) => ({
+                id: index + 1,
+                username: profile['ProfileName'],
+                userid: ProfileID
+            }));
+            setProfiles(profileList);
+        };
+
+        getProfiles();
+    }, []);
+
+    return ( // This renders the profiles onto the screen.
         <View style={styles.container}>
-            {profiles.map(profile => (
-                <ProfileObject key={profile.id} username={profile.username} />
-            ))}
+            {profiles.length === 0 ? (
+                <Text>No profiles</Text>
+            ) : (
+                profiles.map(profile => (
+                    <ProfileObject key={profile.id} username={profile.username} userid={profile.userid} />
+                ))
+            )}
         </View>
     );
 }
 
 // Styles
-
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
@@ -51,6 +84,7 @@ const styles = StyleSheet.create({
         width: 80,
         borderRadius: 40,
     },
+    // This creates a gradient outline for the profile picture.
     gradient: {
         borderRadius: 45,
         padding: 5,
