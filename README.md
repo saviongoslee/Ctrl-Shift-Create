@@ -1,1 +1,1 @@
-.
+Hey! This is a project made for the HackSwift hackathon. Our team was comprised of 5 members, who made this. An ASL version of Duolingo. With Camera capabilities. And profile selection. How awesome is that!
