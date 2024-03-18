@@ -1,15 +1,21 @@
 // This accepts an array of profiles, and lists them in the profile selection menu.
-// {index : number, username : string}
+// {index : number, username : string, userid : number}
 
 import React from 'react';
-import { View, StyleSheet, Image, Text } from 'react-native';
+import { TouchableOpacity, View, StyleSheet, Image, Text } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 // Functions
 
-const ProfileObject = ({ username }) => {
+const ProfileObject = ({ username, userid }) => {
+    const nav = useNavigation();
+    const handleProfileClick = () => { // This handles when the profiles are pressed.
+        global.GlobalProfileID = userid;
+        nav.navigate('Menu');
+    }
     return (
-        <View style={styles.profileItem}>
+        <TouchableOpacity onPress={handleProfileClick} style={styles.profileItem}>
             <LinearGradient // This creates a gradient outline for the profile picture.
                 colors={['#6A5ACD', '#9370DB']}
                 start={{x: 0, y: 0}}
@@ -19,7 +25,7 @@ const ProfileObject = ({ username }) => {
                 <Image source={require('../../assets/default_profile.png')} resizeMode='cover' style={styles.profileImage} />
             </LinearGradient>
             <Text style={styles.profileText}>{username}</Text>
-        </View>
+        </TouchableOpacity>
     );
 }
 
@@ -27,7 +33,7 @@ const ListProfiles = ({profiles}) => {
     return (
         <View style={styles.container}>
             {profiles.map(profile => (
-                <ProfileObject key={profile.id} username={profile.username} />
+                <ProfileObject key={profile.id} username={profile.username} userid={profile.userid} />
             ))}
         </View>
     );
