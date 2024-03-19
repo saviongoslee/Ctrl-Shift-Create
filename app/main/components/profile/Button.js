@@ -6,9 +6,9 @@ import React from 'react';
 import { View, StyleSheet, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const CreateButton = ({title, onButtonPushed}) => {
+const CreateButton = ({title, onButtonPushed, buttonType}) => {
     const navigation = useNavigation();
-
+    let color = buttonType === 'edit' ? "black" : "blueviolet";
     const handleButton = () => {
         if (onButtonPushed == 'nav') {
             navigation.navigate('CreateProfile');
@@ -24,7 +24,7 @@ const CreateButton = ({title, onButtonPushed}) => {
             <View style={styles.buttonContainer}>
                 <Button
                     title={title}
-                    color="blueviolet"
+                    color={color}
                     onPress={handleButton}
                 />
             </View>
