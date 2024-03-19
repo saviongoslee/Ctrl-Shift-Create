@@ -1,11 +1,9 @@
 // This is the profile selection menu, and is also the default app page.
-
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import '../components/profile/Title';
 import ListProfiles from '../components/profile/ListProfiles';
 import Button from '../components/profile/Button';
 import Title from '../components/profile/Title';
-
 
 // Profile Selection
 

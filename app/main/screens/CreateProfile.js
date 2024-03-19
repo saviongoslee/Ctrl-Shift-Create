@@ -9,11 +9,11 @@ import * as SecureStore from 'expo-secure-store';
 
 // Functions
 
-const save = async (key, value) => {
+export const save = async (key, value) => {
     await SecureStore.setItemAsync(key, value);
 }
 
-const get = async (key) => {
+export const get = async (key) => {
     let result = await SecureStore.getItemAsync(key);
     if (!result) return null;
     return result;
@@ -27,8 +27,8 @@ const generateProfileID = () => { // This creates a random profile ID.
     return Math.floor(Math.random() * 90000) + 10000;
 }
 
-const handleProfileStore = (ProfileData, ProfileID, ProfileName, notifyOnSuccess /*<-- optional*/) => { // This allows StoreProfile to upload the profile with a function.
-    save('profiles', ProfileData);
+const handleProfileStore = async (ProfileData, ProfileID, ProfileName, notifyOnSuccess /*<-- optional*/) => { // This allows StoreProfile to upload the profile with a function.
+    await save('profiles', ProfileData);
     setProfileID(ProfileID);
 
     if (notifyOnSuccess == true) {
@@ -59,13 +59,13 @@ const StoreProfile = async (username, notifyOnSuccess) => {
 
     const ProfileID = generateProfileID();
     const ProfileData = await get('profiles');
-
+    
     if (ProfileData) {
         let profiles = JSON.parse(ProfileData);
 
         if (profiles[ProfileID]) return false; // Non-unique ID generated, return unexpected error.
         
-        profiles[ProfileID] = JSON.stringify({ProfileName: username});
+        profiles[ProfileID] = {ProfileName: username};
         handleProfileStore(JSON.stringify(profiles), ProfileID, username, notifyOnSuccess);
     
     } else {
